@@ -1,6 +1,6 @@
 <?php
 
-namespace Ethansmart\Httpbuilder\Http;
+namespace Ethansmart\HttpBuilder\Http;
 
 use Log;
 

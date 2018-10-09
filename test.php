@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/vendor/autoload.php';
 
-use Ethansmart\Httpbuilder\Builder\HttpClientBuilder;
+use Ethansmart\HttpBuilder\Builder\HttpClientBuilder;
 
 class Test
 {

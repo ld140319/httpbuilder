@@ -1,8 +1,8 @@
 <?php
 
-namespace Ethansmart\Httpbuilder\Builder;
+namespace Ethansmart\HttpBuilder\Builder;
 
-use Ethansmart\Httpbuilder\Http\HttpClient;
+use Ethansmart\HttpBuilder\Http\HttpClient;
 use BadMethodCallException;
 use Log;
 
