@@ -64,7 +64,7 @@ class HttpClient
 
         $headers = $this->header;
         curl_setopt($this->ch, CURLOPT_TIMEOUT, 500);
-        curl_setopt($this->ch, CURLOPT_HEADER, 1);
+        curl_setopt($this->ch, CURLOPT_HEADER, 0);
         curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
