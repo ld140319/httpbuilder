@@ -21,15 +21,14 @@ function __construct()
 ```php
 
 $data = [
-    'uri'=>'https://www.baidu.com'
+    'uri'=>'https://www.baidu.com',
+    'headers'=>[
+        'Content-Type'=>'application/json',
+        'X-HTTP-Method-Override':'GET'
+    ]
 ];
 
-return $this->client
-    ->setHeaders('Content-Type:application/json')
-    ->setHeaders('X-HTTP-Method-Override:GET')
-    ->setHeaders('Request_id: Ethan')
-    ->setTimeout(10)
-    ->Get($data);
+return $this->client->Get($data);
 
 ```
 
@@ -39,14 +38,16 @@ return $this->client
 
 $data = [
     'uri'=>'https://www.baidu.com',
+    'headers'=>[
+        'Content-Type'=>'application/json',
+        'X-HTTP-Method-Override':'GET'
+    ],
     'params'=> [
         'user'=>ethan
      ]
 ];
 
-return $this->client
-    ->setHeaders('Content-Type:application/json')
-    ->Post($data);
+return $this->client->Post($data);
 
 ```
 
@@ -56,16 +57,19 @@ return $this->client
 
 $data = [
     'uri'=>'https://www.baidu.com',
+    'headers'=>[
+        'Content-Type'=>'application/json',
+        'X-HTTP-Method-Override':'GET'
+    ],
     'params'=> [
         'user'=>ethan
      ]
 ];
 
-return $this->client
-    ->setHeaders('Content-Type:application/json')
-    ->Put($data); // Delete($data)
+return $this->client->Put($data); // Delete($data)
 
 ```
 
 ### 扩展
 文件上传
+
