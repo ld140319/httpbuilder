@@ -1,6 +1,6 @@
 <?php
 
-namespace Ethansmart\HttpBuilder\Http;
+namespace App\Services\Tools\HttpClient\Http;
 
 use Log;
 
@@ -10,14 +10,14 @@ use Log;
  * Support Http Method : GET, POST, PUT , DELETE
  */
 
-class HttpClient
+class Client
 {
     private $ch ;
-    private $uri ;
+    private $url ;
     private $method ;
     private $params ;
-    private $header ;
     private $timeout;
+    protected $multipart ;
 
     public function __construct()
     {
@@ -27,82 +27,118 @@ class HttpClient
     public function Get($data)
     {
         $data['method'] = "GET";
-        return $this->HttpRequest($data);
+        return $this->performRequest($data);
     }
 
     public function Post($data)
     {
         $data['method'] = "POST";
-        return $this->HttpRequest($data);
+        return $this->performRequest($data);
     }
 
     public function Put($data)
     {
         $data['method'] = "PUT";
-        return $this->HttpRequest($data);
+        return $this->performRequest($data);
     }
 
     public function Delete($data)
     {
         $data['method'] = "DELETE";
-        return $this->HttpRequest($data);
+        return $this->performRequest($data);
+    }
+
+    public function Upload($data)
+    {
+        $data['method'] = "POST";
+        $this->multipart = true;
+        return $this->performRequest($data);
     }
 
     /**
+     * Http 请求
      * @param $data
      * @return array
      */
-    public function HttpRequest($data)
+    public function performRequest($data)
     {
         $this->ch = curl_init();
-        $uri = $data['uri'];
+        $url = $data['url'];
         try {
             $this->dataValication($data);
         } catch (\Exception $e) {
             return ['code'=>-1, 'msg'=>$e->getMessage()];
         }
 
-        $headers = $this->header;
-        curl_setopt($this->ch, CURLOPT_TIMEOUT, 500);
-        curl_setopt($this->ch, CURLOPT_HEADER, 0);
+        $timeout = isset($data['timeout'])?$data['timeout']:$this->timeout;
+        $headers = $this->setHeaders($data);
+        curl_setopt($this->ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($this->ch, CURLOPT_HEADER, true);
         curl_setopt($this->ch, CURLINFO_HEADER_OUT, true);
-        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
+        if (!empty($headers)) {
+            curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
+        }
+        curl_setopt($this->ch, CURLOPT_NOBODY, false);
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->method); //设置请求方式
-        curl_setopt($this->ch, CURLOPT_POSTFIELDS, $this->params);
-        curl_setopt($this->ch, CURLOPT_URL, $this->uri);
 
-        if (1 == strpos('$'.$this->uri, "https://")) {
+        if ($this->method=="GET") {
+            if(strpos($this->url,'?')){
+                $this->url .= http_build_query($this->params);
+            }else{
+                $this->url .= '?' . http_build_query($this->params);
+            }
+        }else{
+            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $this->multipart?$this->params:http_build_query($this->params));
+        }
+
+        curl_setopt($this->ch, CURLOPT_URL, $this->url);
+
+        if (1 == strpos('$'.$this->url, "https://")) {
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
         }
         $result = curl_exec($this->ch);
 
-        Log::info("Request Headers: ". json_encode(curl_getinfo($this->ch, CURLINFO_HEADER_OUT)));
+//        if (curl_getinfo($this->ch, CURLINFO_HTTP_CODE) == '200') {}
 
         if(!curl_errno($this->ch)){
+            list($response_header, $response_body) = explode("\r\n\r\n", $result, 2);
+            Log::info("Request Headers: ". json_encode($response_header));
+            Log::info("Request Body :".json_encode($response_body));
+            $contentType = curl_getinfo($this->ch, CURLINFO_CONTENT_TYPE);
+
             $info = curl_getinfo($this->ch);
             Log::info('耗时 ' . $info['total_time'] . ' Seconds 发送请求到 ' . $info['url']);
+            $response = ['code'=>0, 'msg'=>'OK', 'data'=>$response_body, 'contentType'=>$contentType];
         }else{
             Log::info('Curl error: ' . curl_error($this->ch)) ;
-            return ['code'=>-1, 'msg'=>"请求 $uri 出错: Curl error: ". curl_error($this->ch)];
+            $response = ['data'=>(object)['code'=>-1, 'msg'=>"请求 $url 出错: Curl error: ". curl_error($this->ch)]];
         }
 
         curl_close($this->ch);
-        Log::info("Request Result :".$result);
 
-        if (!is_array($result) || !is_object($result)) {
-            return ['code'=>0, 'msg'=>'OK', 'data'=> $result];
-        }
-        return ['code'=>0, 'msg'=>'OK', 'data'=>json_decode($result)];
+        return $response;
     }
 
-    public function setHeaders($header)
+    /**
+     * 设置Header信息
+     * @param $data
+     * @return array
+     */
+    public function setHeaders($data)
     {
-        $this->header[] = $header;
-        return $this;
+        $headers = array();
+        if (isset($data['headers'])) {
+            foreach ($data['headers'] as $key=>$item) {
+                $headers[] = "$key:$item";
+            }
+        }
+        $headers[] = "Expect:"; // post数据大于1k时，默认不需要添加Expect:100-continue
+
+        return $headers;
     }
 
     public function setTimeout($timeout)
@@ -114,12 +150,17 @@ class HttpClient
         return $this;
     }
 
+    /**
+     * 数据验证
+     * @param $data
+     * @throws \Exception
+     */
     public function dataValication($data)
     {
-        if(!isset($data['uri']) || empty($data['uri'])){
+        if(!isset($data['url']) || empty($data['url'])){
             throw new \Exception("HttpClient Error: Uri不能为空", 4422);
         }else{
-            $this->uri = $data['uri'];
+            $this->url = $data['url'];
         }
 
         if(!isset($data['params']) || empty($data['params'])){
