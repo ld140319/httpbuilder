@@ -73,3 +73,23 @@ return $this->client->Put($data); // Delete($data)
 ### 扩展
 文件上传
 
+```php
+
+$file = Request::file('temp'); // 接收前端传递的文件data
+$originalName = $file->getClientOriginalName(); // 文件原名
+$ext = $file->getClientOriginalExtension();     // 扩展名
+$realPath = $file->getRealPath();   //临时文件的绝对路径
+$type = $file->getClientMimeType();
+$file_obj = new \CURLFile($realPath, $type, $originalName);
+$data = [
+            'url'=> $url,
+            'params'=>[
+                'file'=>$file_obj
+            ]
+        ];
+
+return $this->client->Post($data); // Delete($data)
+
+```
+
+
