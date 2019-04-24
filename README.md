@@ -2,7 +2,7 @@ PHP Curl Http Client
 
 ### Usage
 
-Http Client Support Http Method : GET, POST, PUT , DELETE
+Http Client Support Http Method : GET, POST, PUT , DELETE , HEADER , TRACE
 
 ### 构建 HttpClient
 
@@ -11,7 +11,10 @@ Http Client Support Http Method : GET, POST, PUT , DELETE
 protected $client ;
 function __construct()
 {
-    $this->client = HttpClientBuilder::create()->build();
+    $this->client = HttpClientBuilder::create()->build(); 
+    // 如果你想使用自带的日志类，如 laravel中 Log
+    $this->client = HttpClientBuilder::create()->build(Log::class); 
+
 }
 
 ```
@@ -66,9 +69,30 @@ $data = [
      ]
 ];
 
-return $this->client->Put($data); // Delete($data)
+return $this->client->Put($data); // Put,Delete($data)
 
 ```
+
+
+### HEADER 、TRACE Request
+
+```php
+
+$data = [
+    'uri'=>'https://www.baidu.com',
+    'headers'=>[
+        'Content-Type'=>'application/json',
+        'X-HTTP-Method-Override':'GET'
+    ],
+    'params'=> [
+        'user'=>ethan
+     ]
+];
+
+return $this->client->Header($data); // Header,Trace($data)
+
+```
+
 
 ### 扩展
 文件上传
@@ -88,7 +112,7 @@ $data = [
             ]
         ];
 
-return $this->client->Post($data); // Delete($data)
+return $this->client->Post($data); // Upload($data)
 
 ```
 

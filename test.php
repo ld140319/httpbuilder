@@ -16,14 +16,12 @@ class Test
     public function get()
     {
         $data = [
-            'uri'=>'https://www.baidu.com'
+            'headers'=>["Content-Type:application"=>"application/json", "X-HTTP-Method-Override"=>"GET", "Request_id"=>"Ethan"],
+            'url'=>'https://www.baidua.com'
         ];
 
         return $this->client
-            ->setHeaders('Content-Type:application/json')
-            ->setHeaders('X-HTTP-Method-Override:GET')
-            ->setHeaders('Request_id: Ethan')
-            ->setTimeout(10)
+            ->setTimeout(5)
             ->Get($data);
     }
 };

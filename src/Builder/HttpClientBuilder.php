@@ -3,8 +3,8 @@
 namespace Ethansmart\HttpBuilder\Builder;
 
 use Ethansmart\HttpBuilder\Http\HttpClient;
+use Ethansmart\HttpBuilder\Log\Log;
 use BadMethodCallException;
-use Log;
 
 class HttpClientBuilder
 {
@@ -21,9 +21,9 @@ class HttpClientBuilder
         return new static();
     }
 
-    public function build()
+    public function build($logInstance = null)
     {
-        return new HttpClient();
+        return new HttpClient($logInstance);
     }
 
     public function __call($name, $arguments)

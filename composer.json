@@ -18,7 +18,9 @@
     },
 
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+        "ethansmart/httpbuilder": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "Ethansmart\\HttpBuilder\\": "src/"
