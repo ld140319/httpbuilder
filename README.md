@@ -43,7 +43,7 @@ $data = [
     'uri'=>'https://www.baidu.com',
     'headers'=>[
         'Content-Type'=>'application/json',
-        'X-HTTP-Method-Override':'GET'
+        'X-HTTP-Method-Override':'POST'
     ],
     'params'=> [
         'user'=>ethan
@@ -62,7 +62,7 @@ $data = [
     'uri'=>'https://www.baidu.com',
     'headers'=>[
         'Content-Type'=>'application/json',
-        'X-HTTP-Method-Override':'GET'
+        'X-HTTP-Method-Override':'PUT'
     ],
     'params'=> [
         'user'=>ethan
@@ -82,7 +82,7 @@ $data = [
     'uri'=>'https://www.baidu.com',
     'headers'=>[
         'Content-Type'=>'application/json',
-        'X-HTTP-Method-Override':'GET'
+        'X-HTTP-Method-Override':'HEADER'
     ],
     'params'=> [
         'user'=>ethan
