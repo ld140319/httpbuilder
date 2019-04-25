@@ -45,4 +45,18 @@ class HttpRequestTest extends TestCase
 		$this->assertEquals(0, $result["code"]);
 	}
 
+	// test http header request
+	public function testHttpHeader()
+	{
+		$data = [
+            'headers'=>["Content-Type:application"=>"application/json"],
+            'url'=>'https://www.baidu.com',
+            'params'=>[
+            	"user"=>"username:ethan"
+            ]
+        ];
+        $result = $this->client->Header($data);
+		$this->assertEquals(0, $result["code"]);
+	}
+
 }
