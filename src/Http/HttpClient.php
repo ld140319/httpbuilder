@@ -138,7 +138,7 @@ class HttpClient
 
             $info = curl_getinfo($this->ch);
             $this->log::info('耗时 ' . $info['total_time'] . ' Seconds 发送请求到 ' . $info['url']);
-            $response = ['code'=>0, 'msg'=>'OK', 'data'=>$response_body, 'contentType'=>$contentType];
+            $response = ['code'=>0, 'msg'=>'OK', 'contentType'=>$contentType, 'header'=>$response_header, 'data'=>$response_body, ];
         }else{
             $this->log::info('Curl error: ' . curl_error($this->ch)) ;
             $response = ['data'=>(object)['code'=>-1, 'msg'=>"请求 $url 出错: Curl error: ". curl_error($this->ch)]];

@@ -46,7 +46,7 @@ $data = [
         'X-HTTP-Method-Override':'GET'
     ],
     'params'=> [
-        'user'=>ethan
+        'user'=>"username:ethan"
      ]
 ];
 
@@ -65,7 +65,7 @@ $data = [
         'X-HTTP-Method-Override':'GET'
     ],
     'params'=> [
-        'user'=>ethan
+        'user'=>"username:ethan"
      ]
 ];
 
@@ -85,7 +85,7 @@ $data = [
         'X-HTTP-Method-Override':'GET'
     ],
     'params'=> [
-        'user'=>ethan
+        'user'=>"username:ethan"
      ]
 ];
 
