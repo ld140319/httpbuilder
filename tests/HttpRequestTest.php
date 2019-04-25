@@ -32,7 +32,7 @@ class HttpRequestTest extends TestCase
 	}
 
 	// test http post request
-	public function testHttpGet()
+	public function testHttpPost()
 	{
 		$data = [
             'headers'=>["Content-Type:application"=>"application/json"],

@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/vendor/autoload.php';
+// require_once __DIR__.'/vendor/autoload.php';
 
 use Ethansmart\HttpBuilder\Builder\HttpClientBuilder;
 
@@ -30,7 +30,7 @@ class Test
     public function postData()
     {
         $data = [
-            'headers'=>["Content-Type:application"=>"application/json",
+            'headers'=>["Content-Type:application"=>"application/json"],
             'url'=>'https://www.baidua.com',
             'params'=> [
                 'user'=>"username:ethan"
@@ -39,7 +39,7 @@ class Test
 
         return $this->client
             ->setTimeout(5)
-            ->Get($data);
+            ->Post($data);
     }
 };
 
