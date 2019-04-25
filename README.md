@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/roancsu/httpbuilder.svg?branch=master)](https://travis-ci.com/roancsu/httpbuilder)
+
 PHP Curl Http Client
 
 ### Usage
