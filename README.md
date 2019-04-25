@@ -1,6 +1,9 @@
-[![Build Status](https://travis-ci.com/roancsu/httpbuilder.svg?branch=master)](https://travis-ci.com/roancsu/httpbuilder)
+# Curl Http Client #
 
-PHP Curl Http Client
+[![Software license][ico-license]](LICENSE)
+[![Latest tag][ico-tag]]
+[![Build status][ico-travis]][link-travis]
+[![Code_size][ico-size]]
 
 ### Usage
 
@@ -117,5 +120,10 @@ $data = [
 return $this->client->Post($data); // Upload($data)
 
 ```
+
+[ico-license]: https://img.shields.io/github/license/roancsu/httpbuilder.svg
+[ico-tag]: https://img.shields.io/github/tag/roancsu/httpbuilder.svg
+[ico-travis]: https://img.shields.io/travis/nrk/predis.svg?style=flat-square
+[ico-size]: https://img.shields.io/github/languages/code-size/roancsu/httpbuilder.svg
 
 
