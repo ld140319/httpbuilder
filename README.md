@@ -1,9 +1,9 @@
 # Curl Http Client #
 
 [![Software license][ico-license]](LICENSE)
-[![Latest tag][ico-tag]]
-[![Build status][ico-travis]][link-travis]
-[![Code_size][ico-size]]
+![Latest tag][ico-tag]
+![Build status][ico-travis]
+![Code_size][ico-size]
 
 ### Usage
 
