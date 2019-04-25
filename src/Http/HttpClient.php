@@ -62,9 +62,9 @@ class HttpClient
         return $this->performRequest($data);
     }
 
-    public function Head($data)
+    public function Header($data)
     {
-        $data['method'] = "HEAD";
+        $data['method'] = "HEADER";
         return $this->performRequest($data);
     }
 
